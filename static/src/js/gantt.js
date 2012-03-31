@@ -141,7 +141,7 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
                 var task_start = openerp.web.auto_str_to_date(task[self.fields_view.arch.attrs.date_start]);
                 var pct_completed = (task[self.fields_view.arch.attrs.color] == "done") ? 100 : 0;
                 var task_desc = task[self.fields_view.arch.attrs.string];
-                var task_name = (!task_desc) ? task.__name : task_desc;
+                var task_name = (!task_desc) ? task.__name : task_desc + "...... " + task.__name;
                 if (!task_start)
                     return;
                 var task_stop;
