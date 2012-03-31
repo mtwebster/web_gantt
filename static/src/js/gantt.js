@@ -39,7 +39,7 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
             n_group_bys = group_bys;
         }
         // gather the fields to get
-        var fields = _.compact(_.map(["date_start", "date_delay", "date_stop", "color"], function(key) {
+        var fields = _.compact(_.map(["date_start", "date_delay", "date_stop", "color", "string"], function(key) {
             return self.fields_view.arch.attrs[key] || '';
         }));
         fields = _.uniq(fields.concat(n_group_bys));
@@ -138,9 +138,10 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
                     return {task_info: group, task_start: task_start, task_stop: task_stop};
                 }
             } else {
-                var task_name = task.__name;
                 var task_start = openerp.web.auto_str_to_date(task[self.fields_view.arch.attrs.date_start]);
-                var pct_completed = (task[self.fields_view.arch.attrs.color] == "done") ? 100 : 0
+                var pct_completed = (task[self.fields_view.arch.attrs.color] == "done") ? 100 : 0;
+                var task_desc = task[self.fields_view.arch.attrs.string];
+                var task_name = (!task_desc) ? task.__name : task_desc;
                 if (!task_start)
                     return;
                 var task_stop;
