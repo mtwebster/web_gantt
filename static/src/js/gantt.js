@@ -5,6 +5,8 @@ openerp.web_gantt = function (openerp) {
 var _t = openerp.web._t,
    _lt = openerp.web._lt;
 var QWeb = openerp.web.qweb;
+var pred_task = 0;
+
 openerp.web.views.add('gantt', 'openerp.web_gantt.GanttView');
 
 openerp.web_gantt.GanttView = openerp.web.View.extend({
@@ -27,6 +29,7 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
     },
     do_search: function (domains, contexts, group_bys) {
         var self = this;
+
         self.last_domains = domains;
         self.last_contexts = contexts;
         self.last_group_bys = group_bys;
@@ -124,17 +127,20 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
                 }, undefined);
                 var duration = (task_stop.getTime() - task_start.getTime()) / (1000 * 60 * 60);
                 var group_name = openerp.web.format_value(task.name, self.fields[group_bys[level]]);
+                
                 if (level == 0) {
                     var group = new GanttProjectInfo(_.uniqueId("gantt_project_"), group_name, task_start);
                     _.each(task_infos, function(el) {
                         group.addTask(el.task_info);
                     });
+                    pred_task=0;
                     return group;
                 } else {
                     var group = new GanttTaskInfo(_.uniqueId("gantt_project_task_"), group_name, task_start, duration, 100);
                     _.each(task_infos, function(el) {
                         group.addChildTask(el.task_info);
                     });
+                    pred_task=0;
                     return {task_info: group, task_start: task_start, task_stop: task_stop};
                 }
             } else {
@@ -158,7 +164,12 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
                 }
                 var duration = (task_stop.getTime() - task_start.getTime()) / (1000 * 60 * 60);
                 var id = _.uniqueId("gantt_task_");
-                var task_info = new GanttTaskInfo(id, task_name, task_start, duration, pct_completed);
+                if (pred_task == 0 || task_desc) {
+                    var task_info = new GanttTaskInfo(id, task_name, task_start, duration, pct_completed);
+                    } else {
+                    var task_info = new GanttTaskInfo(id, task_name, task_start, duration, pct_completed, pred_task);
+                    }
+                pred_task = id;
                 task_info.internal_task = task;
                 task_ids[id] = task_info;
                 return {task_info: task_info, task_start: task_start, task_stop: task_stop};
@@ -196,7 +207,7 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
         var self = this;
         var itask = task_obj.TaskInfo.internal_task;
         var start = task_obj.getEST();
-        var duration = (task_obj.getDuration() / 8) * 24;
+        var duration = task_obj.getDuration();
         var end = start.clone().addMilliseconds(duration * 60 * 60 * 1000);
         var data = {};
         data[self.fields_view.arch.attrs.date_start] =
