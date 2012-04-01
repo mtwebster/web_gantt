@@ -1490,6 +1490,7 @@ GanttChart.prototype.setPredTask = function(project)
 
         if (project.ParentTasks[k].PredecessorTask)
         {
+/*
             if (!this.checkPosPredecessorTask(project.ParentTasks[k].PredecessorTask, project.ParentTasks[k])) {
                 if (!this.correctError) {
                     this.Error.throwError("DATA_ERROR", 26, [project.ParentTasks[k].PredecessorTask.Id,project.ParentTasks[k].Id]);
@@ -1499,6 +1500,7 @@ GanttChart.prototype.setPredTask = function(project)
                 }
 
             }
+*/
         }
         isError = this.setPredTaskInTree(project.ParentTasks[k]);
         if (isError) return isError;
@@ -1528,7 +1530,7 @@ GanttChart.prototype.setPredTaskInTree = function(parentTask)
                 }
 
             }
-
+/*
             if (!this.checkPosPredecessorTask(parentTask.ChildTasks[t].PredecessorTask, parentTask.ChildTasks[t]))
             {
                 if (!this.correctError) {
@@ -1538,6 +1540,7 @@ GanttChart.prototype.setPredTaskInTree = function(parentTask)
                     this.correctPosPredecessorTask(parentTask.ChildTasks[t].PredecessorTask, parentTask.ChildTasks[t]);
                 }
             }
+*/
             parentTask.ChildTasks[t].PredecessorTask.ChildPredTasks.push(parentTask.ChildTasks[t]);
         }
 
