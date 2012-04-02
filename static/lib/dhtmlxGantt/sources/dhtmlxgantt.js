@@ -366,7 +366,7 @@ function GanttChart()
     this.isShowConMenu = false;
     this.correctError = false;
     this.maxWidthPanelNames = 150;
-    this.minWorkLength = 8;
+    this.minWorkLength = 1;
     this.paramShowTask = [];
     this.paramShowProject = [];
 
@@ -4158,7 +4158,7 @@ GanttProject.prototype.getDescStr = function()
             case "StartDate":
                 if (str != "")str += delim;
                 var d = this.Project[this.Chart.paramShowProject[i]];
-                str += d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear();
+                str += (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
                 break;
             case "Duration":
                 if (str != "")str += delim;
@@ -4527,7 +4527,7 @@ GanttTask.prototype.getDescStr = function()
                 break;
             case "EST":
                 if (str != "")str += delim;
-                str += propValue.getDate() + "." + (propValue.getMonth() + 1) + "." + propValue.getFullYear();
+                str += (propValue.getMonth() + 1) + "/" + propValue.getDate() + "/" + propValue.getFullYear();
                 break;
             case "S-F":
                 if (str != "")str += delim;
