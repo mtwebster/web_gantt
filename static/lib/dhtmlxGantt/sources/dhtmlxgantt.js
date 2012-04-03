@@ -4532,9 +4532,9 @@ GanttTask.prototype.getDescStr = function()
             case "S-F":
                 if (str != "")str += delim;
                 propValue = this.TaskInfo["EST"];
-                str += propValue.getDate() + "." + (propValue.getMonth() + 1) + "." + propValue.getFullYear() + " - ";
+                str += (propValue.getMonth() + 1) + "/" + propValue.getDate() + "/" + propValue.getFullYear() + " - ";
                 propValue = this.getFinishDate();
-                str += propValue.getDate() + "." + (propValue.getMonth() + 1) + "." + propValue.getFullYear();
+                str += (propValue.getMonth() + 1) + "/" + propValue.getDate() + "/" + propValue.getFullYear();
                 break;
             case "Duration":
                 if (str != "")str += delim;
@@ -6034,13 +6034,13 @@ contextMenuTab.prototype.show = function()
                 this.insertData(t, "Name", this.object.TaskInfo.Name);
                 this.insertData(t, "Duration", this.object.TaskInfo.Duration + " hrs");
                 this.insertData(t, "Percent complete", this.object.TaskInfo.PercentCompleted + "%");
-                this.insertData(t, "EST", this.object.TaskInfo.EST.getDate() + "." + (this.object.TaskInfo.EST.getMonth() + 1) + "." + this.object.TaskInfo.EST.getFullYear());
+                this.insertData(t, "EST", (this.object.TaskInfo.EST.getMonth() + 1) + "/" + this.object.TaskInfo.EST.getDate() + "/" + this.object.TaskInfo.EST.getFullYear());
                 this.insertData(t, "Predecessor", this.object.TaskInfo.PredecessorTaskId);
             } else
             {
                 this.insertData(t, "Id", this.object.Project.Id);
                 this.insertData(t, "Name", this.object.Project.Name);
-                this.insertData(t, "Start date", this.object.Project.StartDate.getDate() + "." + (this.object.Project.StartDate.getMonth() + 1) + "." + this.object.Project.StartDate.getFullYear());
+                this.insertData(t, "Start date", (this.object.Project.StartDate.getMonth() + 1) + "/" + this.object.Project.StartDate.getDate() + "/" + this.object.Project.StartDate.getFullYear());
             }
         }
     }
