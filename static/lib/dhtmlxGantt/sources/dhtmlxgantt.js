@@ -4017,7 +4017,7 @@ GanttTask.prototype.moveTaskItem = function(posX)
     this.addDayInPanelTime();
     this.cTaskItem[0].style.left = posX + "px";
     var date = this.getDateOnPosition(posX); 
-    this.cTaskItem[0].childNodes[1].firstChild.rows[0].cells[0].innerHTML = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getUTCFullYear();
+    this.cTaskItem[0].childNodes[1].firstChild.rows[0].cells[0].innerHTML = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getUTCFullYear();
 };
 /**
  * @desc: resize current task
