@@ -9,4 +9,8 @@
     <t t-name="GanttView-create-button">
         <button class="oe_button oe-gantt-view-create">Create</button>
     </t>
+    <t t-name="GanttView-print-button">
+        <button class="oe_button oe-gantt-view-print">Print</button>
+    </t>
+
 </templates>

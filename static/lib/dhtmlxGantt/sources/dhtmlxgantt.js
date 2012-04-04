@@ -365,7 +365,7 @@ function GanttChart()
     this.isEditable = false;
     this.isShowConMenu = false;
     this.correctError = false;
-    this.maxWidthPanelNames = 150;
+    this.maxWidthPanelNames = 400;
     this.minWorkLength = 1;
     this.paramShowTask = [];
     this.paramShowProject = [];

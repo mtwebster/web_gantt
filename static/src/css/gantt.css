@@ -3,7 +3,9 @@
     min-height: 500px;
 }
 
-.openerp .oe-gantt-view-view .oe-gantt-view-create {
+
+.openerp .oe-gantt-view-view .oe-gantt-view-print {
     position: absolute;
     top: 5px;
 }
+

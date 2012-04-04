@@ -6,7 +6,9 @@ var _t = openerp.web._t,
    _lt = openerp.web._lt;
 var QWeb = openerp.web.qweb;
 var pred_task = 0;
-
+var gantt;
+var gb="";
+var newjob=0;
 openerp.web.views.add('gantt', 'openerp.web_gantt.GanttView');
 
 openerp.web_gantt.GanttView = openerp.web.View.extend({
@@ -36,6 +38,7 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
         // select the group by
         var n_group_bys = [];
         if (this.fields_view.arch.attrs.default_group_by) {
+            gb = this.fields_view.arch.attrs.default_group_by;
             n_group_bys = this.fields_view.arch.attrs.default_group_by.split(',');
         }
         if (group_bys.length) {
@@ -127,8 +130,8 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
                 }, undefined);
                 var duration = (task_stop.getTime() - task_start.getTime()) / (1000 * 60 * 60);
                 var group_name = openerp.web.format_value(task.name, self.fields[group_bys[level]]);
-                
                 if (level == 0) {
+                    newjob=1;
                     var group = new GanttProjectInfo(_.uniqueId("gantt_project_"), group_name, task_start);
                     _.each(task_infos, function(el) {
                         group.addTask(el.task_info);
@@ -147,7 +150,11 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
                 var task_start = openerp.web.auto_str_to_date(task[self.fields_view.arch.attrs.date_start]);
                 var pct_completed = (task[self.fields_view.arch.attrs.color] == "done") ? 100 : 0;
                 var task_desc = task[self.fields_view.arch.attrs.string];
-                var task_name = (!task_desc) ? task.__name : task_desc + "...... " + task.__name;
+                var task_name = (gb != "workcenter_id") ? task.__name : task_desc + ": " + task.__name;
+                if (newjob == 1 && gb != "workcenter_id") {
+                    task_name = task_desc + ": " + task_name;
+                    newjob = 0;
+                }
                 if (!task_start)
                     return;
                 var task_stop;
@@ -162,9 +169,10 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
                         return;
                     task_stop = task_start.clone().addMilliseconds(tmp * 60 * 60 * 1000);
                 }
-                var duration = (task_stop.getTime() - task_start.getTime()) / (1000 * 60 * 60);
+          //    var duration = (task_stop.getTime() - task_start.getTime()) / (1000 * 60 * 60);
+                var duration = tmp;
                 var id = _.uniqueId("gantt_task_");
-                if (pred_task == 0 || task_desc) {
+                if (pred_task == 0 || gb == "workcenter_id") {
                     var task_info = new GanttTaskInfo(id, task_name, task_start, duration, pct_completed);
                     } else {
                     var task_info = new GanttTaskInfo(id, task_name, task_start, duration, pct_completed, pred_task);
@@ -175,7 +183,7 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
                 return {task_info: task_info, task_start: task_start, task_stop: task_stop};
             }
         }
-        var gantt = new GanttChart();
+        gantt = new GanttChart();
         _.each(_.compact(_.map(groups, function(e) {return generate_task_info(e, 0);})), function(project) {
             gantt.addProject(project);
         });
@@ -198,10 +206,15 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
         });
         
         // insertion of create button
+//        var td = $($("table td", self.$element)[0]);
+//        var rendered = QWeb.render("GanttView-create-button");
+//        $(rendered).prependTo(td);
+//        $(".oe-gantt-view-create", this.$element).click(this.on_task_create);
+        // print button
         var td = $($("table td", self.$element)[0]);
-        var rendered = QWeb.render("GanttView-create-button");
-        $(rendered).prependTo(td);
-        $(".oe-gantt-view-create", this.$element).click(this.on_task_create);
+        var rendered = QWeb.render("GanttView-print-button");
+        $(rendered).appendTo(td);
+        $(".oe-gantt-view-print", this.$element).click(this.on_print);
     },
     on_task_changed: function(task_obj) {
         var self = this;
@@ -247,6 +260,9 @@ openerp.web_gantt.GanttView = openerp.web.View.extend({
                 initial_view: "form",
             }
         );
+    },
+    on_print: function() {
+        gantt.printToWindow();
     },
 });
 
